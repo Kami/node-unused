@@ -1,0 +1,28 @@
+{
+  "name": "unused",
+  "description": "A module which reports unused variables in your code.",
+  "version": "0.1.0",
+  "author": "Tomaz Muraus <tomaz+npm@tomaz.me> http://www.tomaz.me",
+  "keywords": [ "unused", "variables", "imports", "unused variables", "unused imports"],
+  "homepage": "https://github.com/Kami/node-unused",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Kami/node-unused.git"
+  },
+  "directories": {
+    "lib": "./lib",
+    "bin": "./bin"
+  },
+  "dependencies": {
+    "optimist": "= 0.2.6",
+    "sprintf": "0.1.1",
+    "terminal": "= 0.1.2",
+    "findit": "0.1.1",
+    "burrito": "0.2.8"
+  },
+  "engines": {
+    "node": ">= 0.4.0"
+  },
+  "main": "./index",
+  "bin": "./bin/unused"
+}

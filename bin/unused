@@ -1,0 +1,19 @@
+#!/usr/bin/env node
+
+var util = require('util');
+
+var argv = require('optimist').argv;
+
+var unused = require('../lib/unused');
+
+if (argv.path) {
+  unused.main(argv.path);
+
+  process.on('exit', function() {
+    var count = unused.report(unused.variables);
+    process.reallyExit(count);
+  });
+}
+else {
+  util.puts('Usage: unused --path [path to .js files]');
+}
