@@ -20,7 +20,7 @@ function unused(src) {
         var handler = handlers[node.type](node, context);
     };
 
-    function maybe_set_id(id, context) {
+    function maybe_set_id(id, context, is_param) {
         if (!id) {
             return;
         }
@@ -30,7 +30,15 @@ function unused(src) {
             return;
         }
 
-        context.set(id.name, id.loc.start);
+        context.set(id.name, {
+            name: id.name,
+            loc: id.loc.start,
+            param: is_param || false
+        });
+    }
+
+    function maybe_set_param(id, context) {
+        maybe_set_id(id, context, true);
     }
 
     var handlers = {
@@ -51,7 +59,7 @@ function unused(src) {
 
             // parameters are within the context of the function
             node.params.forEach(function(node) {
-                maybe_set_id(node, ctx);
+                maybe_set_param(node, ctx);
             });
 
             // exec function body with new context
@@ -66,7 +74,7 @@ function unused(src) {
 
             // parameters are within the context of the function
             node.params.forEach(function(node) {
-                maybe_set_id(node, ctx);
+                maybe_set_param(node, ctx);
             });
 
             // exec function body with new context
@@ -88,6 +96,7 @@ function unused(src) {
         },
         MemberExpression: function(node, context) {
             exec(node.object, context);
+            exec(node.property, context);
         },
         ExpressionStatement: function(node, context) {
             exec(node.expression, context);
@@ -175,6 +184,29 @@ function unused(src) {
             exec(node.left, context);
             exec(node.right, context);
             exec(node.body, context);
+        },
+        WhileStatement: function(node, context) {
+            exec(node.test, context);
+            exec(node.body, context);
+        },
+        SequenceExpression: function(node, context) {
+            node.expressions.forEach(function(node) {
+                exec(node, context);
+            });
+        },
+        ForStatement: function(node, context) {
+            exec(node.init, context);
+            exec(node.test, context);
+            exec(node.update, context);
+            exec(node.body, context);
+        },
+        DoWhileStatement: function(node, context) {
+            exec(node.body, context);
+            exec(node.test, context);
+        },
+        ContinueStatement: function(node, context) {
+        },
+        BreakStatement: function(node, context) {
         },
         ThisExpression: function(node, context) {
         },
