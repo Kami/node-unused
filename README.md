@@ -38,5 +38,5 @@ Returns an array of objects specifying the name, location, and if the variable i
 ## install
 
 ```shell
-npm install git://github.com/shtylman/node-unused.git
+npm install unused
 ```
