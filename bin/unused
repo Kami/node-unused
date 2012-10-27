@@ -1,19 +1,31 @@
 #!/usr/bin/env node
 
-var util = require('util');
+var fs = require('fs');
 
-var argv = require('optimist').argv;
+var argv = require('optimist')
+  .demand('path')
+  .argv;
 
-var unused = require('../lib/unused');
+var unused = require('../');
 
-if (argv.path) {
-  unused.main(argv.path);
+var unused_vars = unused(fs.readFileSync(argv.path, 'utf8'));
 
-  process.on('exit', function() {
-    var count = unused.report(unused.variables);
-    process.reallyExit(count);
-  });
+// sort by line number
+unused_vars.sort(function(left, right) {
+    return left.loc.line - right.loc.line;
+});
+
+if (unused_vars.lenth === 0) {
+    process.exit(0);
 }
-else {
-  util.puts('Usage: unused --path [path to .js files]');
-}
+
+unused_vars.forEach(function(variable) {
+    console.log('%s - on line %s', variable.name, variable.loc.line);
+});
+
+// exit with -1 to indicate unused vars exist
+// useful if used as a git commit hook or other script to detect failure
+// failure is defined by the existence of unused variables
+process.exit(-1);
+
+// vim: ft=javascript
