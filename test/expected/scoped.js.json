@@ -1,0 +1,10 @@
+[
+  {
+    "name": "foo",
+    "loc": {
+      "line": 4,
+      "column": 4
+    },
+    "param": false
+  }
+]

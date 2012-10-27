@@ -1,0 +1,10 @@
+[
+  {
+    "name": "a",
+    "loc": {
+      "line": 3,
+      "column": 4
+    },
+    "param": false
+  }
+]
