@@ -1,19 +1,49 @@
 #!/usr/bin/env node
 
-var util = require('util');
+var fs = require('fs');
 
-var argv = require('optimist').argv;
+var argv = require('optimist')
+    .usage('Usage: unused <file>')
+    .describe('ignore-params', 'comma separated list of unused function parameters to ignore')
+    .argv;
 
-var unused = require('../lib/unused');
+var unused = require('../');
 
-if (argv.path) {
-  unused.main(argv.path);
+var ignore_params = (argv['ignore-params'] || '').split(',');
 
-  process.on('exit', function() {
-    var count = unused.report(unused.variables);
-    process.reallyExit(count);
-  });
+var errors = 0;
+argv._.forEach(function(path) {
+
+    console.log(path);
+
+    try {
+        var unused_vars = unused(fs.readFileSync(path, 'utf8'));
+    }
+    catch (e) {
+        return console.dir(e);
+    }
+
+    // sort by line number
+    unused_vars.sort(function(left, right) {
+        return left.loc.line - right.loc.line;
+    });
+
+    unused_vars.forEach(function(variable) {
+        if (variable.param && ignore_params.indexOf(variable.name) >= 0) {
+            return;
+        }
+
+        console.log('\t%s - on line %s', variable.name, variable.loc.line);
+    });
+
+    errors += unused_vars.length;
+});
+
+// exit with -1 to indicate unused vars exist
+// useful if used as a git commit hook or other script to detect failure
+// failure is defined by the existence of unused variables
+if (errors > 0) {
+    process.exit(-1);
 }
-else {
-  util.puts('Usage: unused --path [path to .js files]');
-}
+
+// vim: ft=javascript
