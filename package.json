@@ -9,20 +9,13 @@
     "type": "git",
     "url": "git://github.com/Kami/node-unused.git"
   },
-  "directories": {
-    "lib": "./lib",
-    "bin": "./bin"
-  },
   "dependencies": {
-    "optimist": "= 0.2.6",
-    "sprintf": "0.1.1",
-    "terminal": "= 0.1.2",
-    "findit": "0.1.1",
-    "burrito": "0.2.8"
+    "optimist": "0.3.5",
+    "esprima": "1.0.0"
   },
   "engines": {
     "node": ">= 0.4.0"
   },
-  "main": "./index",
+  "main": "./index.js",
   "bin": "./bin/unused"
 }
