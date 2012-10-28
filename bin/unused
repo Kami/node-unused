@@ -14,13 +14,17 @@ var ignore_params = (argv['ignore-params'] || '').split(',');
 var errors = 0;
 argv._.forEach(function(path) {
 
-    console.log(path);
-
     try {
         var unused_vars = unused(fs.readFileSync(path, 'utf8'));
     }
     catch (e) {
         return console.dir(e);
+    }
+
+    // only show the path if there are unused variables
+    // silent otherwise
+    if (unused_vars.length > 0) {
+        console.log(path);
     }
 
     // sort by line number

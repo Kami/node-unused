@@ -17,7 +17,7 @@ function unused(src) {
             return;
         }
 
-        var handler = handlers[node.type](node, context);
+        handlers[node.type](node, context);
     };
 
     function maybe_set_id(id, context, is_param) {
@@ -204,15 +204,15 @@ function unused(src) {
             exec(node.body, context);
             exec(node.test, context);
         },
-        ContinueStatement: function(node, context) {
+        ContinueStatement: function() {
         },
-        BreakStatement: function(node, context) {
+        BreakStatement: function() {
         },
-        ThisExpression: function(node, context) {
+        ThisExpression: function() {
         },
-        EmptyStatement: function(node, context) {
+        EmptyStatement: function() {
         },
-        Literal: function(node, context) {
+        Literal: function() {
         },
         Identifier: function(node, context) {
             context.remove(node.name);
