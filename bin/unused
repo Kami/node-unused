@@ -6,6 +6,8 @@ var argv = require('optimist')
     .usage('Usage: unused <file>')
     .describe('ignore-params', 'comma separated list of unused function parameters to ignore')
     .describe('ignore-all-params', 'flag to ignore all function parameters')
+    .boolean('ignore-all-params')
+    .default('ignore-all-params', false)
     .argv;
 
 var unused = require('../');

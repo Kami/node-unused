@@ -1,4 +1,4 @@
-# unused
+# unused [![Build Status](https://secure.travis-ci.org/Kami/node-unused.png?branch=master)](https://travis-ci.org/Kami/node-unused)
 
 Identify unused variables in your javascript code.
 
