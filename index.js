@@ -3,7 +3,10 @@ var esprima = require('esprima');
 var Context = require('./lib/context');
 
 // return a list of unused variables in the source
-function unused(src) {
+function unused(src, options) {
+    var options = options || {};
+    var ignore_all_params = !!options.ignore_all_params;
+
     var ast = esprima.parse(src, {
         loc: true
     });
@@ -38,7 +41,9 @@ function unused(src) {
     }
 
     function maybe_set_param(id, context) {
-        maybe_set_id(id, context, true);
+        if(!ignore_all_params) {
+            maybe_set_id(id, context, true);
+        }
     }
 
     var handlers = {
