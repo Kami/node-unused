@@ -2,13 +2,18 @@
 
 var fs = require('fs');
 
-var argv = require('optimist')
+var optimist = require('optimist')
     .usage('Usage: unused [--ignore-params <param 1,param 2,param n..>] <file>')
     .string('ignore-params')
-    .describe('ignore-params', 'comma separated list of unused function parameters to ignore')
-    .argv;
+    .describe('ignore-params', 'comma separated list of unused function parameters to ignore');
+var argv = optimist.argv;
 
 var unused = require('../');
+
+if (argv.help || argv._.length === 0) {
+    console.log(optimist.help())
+    process.exit(1);
+}
 
 var ignore_params = (argv['ignore-params'] || '').split(',');
 
