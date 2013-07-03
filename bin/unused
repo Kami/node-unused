@@ -2,12 +2,18 @@
 
 var fs = require('fs');
 
-var argv = require('optimist')
-    .usage('Usage: unused <file>')
-    .describe('ignore-params', 'comma separated list of unused function parameters to ignore')
-    .argv;
+var optimist = require('optimist')
+    .usage('Usage: unused [--ignore-params <param 1,param 2,param n..>] <file 1> <file 2> <file n>')
+    .string('ignore-params')
+    .describe('ignore-params', 'comma separated list of unused function parameters to ignore');
+var argv = optimist.argv;
 
 var unused = require('../');
+
+if (argv.help || argv._.length === 0) {
+    console.log(optimist.help())
+    process.exit(1);
+}
 
 var ignore_params = (argv['ignore-params'] || '').split(',');
 
@@ -21,16 +27,24 @@ argv._.forEach(function(path) {
         return console.dir(e);
     }
 
+    // sort by line number
+    unused_vars.sort(function(left, right) {
+        return left.loc.line - right.loc.line;
+    });
+
+    unused_vars = unused_vars.filter(function(variable) {
+        if (variable.param && ignore_params.indexOf(variable.name) >= 0) {
+            return false;
+        }
+
+        return true;
+    });
+
     // only show the path if there are unused variables
     // silent otherwise
     if (unused_vars.length > 0) {
         console.log(path);
     }
-
-    // sort by line number
-    unused_vars.sort(function(left, right) {
-        return left.loc.line - right.loc.line;
-    });
 
     unused_vars.forEach(function(variable) {
         if (variable.param && ignore_params.indexOf(variable.name) >= 0) {

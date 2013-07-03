@@ -1,0 +1,18 @@
+[
+  {
+    "name": "a",
+    "loc": {
+      "line": 2,
+      "column": 13
+    },
+    "param": true
+  },
+  {
+    "name": "b",
+    "loc": {
+      "line": 2,
+      "column": 16
+    },
+    "param": true
+  }
+]

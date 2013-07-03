@@ -1,5 +1,9 @@
 var assert = require('assert');
+var path = require('path');
 var fs = require('fs');
+var exec = require('child_process').exec;
+
+var BINARY = path.join(__dirname, '../bin/unused');
 
 var unused = require('..');
 
@@ -25,3 +29,56 @@ files.forEach(function(file) {
     });
 });
 
+test('cli_help_option', function(done) {
+    var child = exec(BINARY, ' --help', function(err, stdout, stderr) {
+        assert.ok(err);
+        assert.equal(err.code, 1);
+        assert.ok(stdout.indexOf('Usage: unused') === 0);
+        done();
+    });
+});
+
+test('cli_no_options_should_print_help', function(done) {
+    var child = exec(BINARY, function(err, stdout, stderr) {
+        assert.ok(err);
+        assert.equal(err.code, 1);
+        assert.ok(stdout.indexOf('Usage: unused') === 0);
+        done();
+    });
+});
+
+test('cli_basic_single_file', function(done) {
+    var child, cmd;
+
+    cmd = BINARY + ' test/fixtures/basic.js'
+    child = exec(cmd, function(err, stdout, stderr) {
+        assert.ok(err);
+        assert.equal(err.code, 255);
+        assert.ok(stdout.indexOf('a - on line 3') !== -1);
+        done();
+    });
+});
+
+test('cli_function_single_file', function(done) {
+    var child, cmd;
+
+    cmd = BINARY + ' test/fixtures/function-with-params.js'
+    child = exec(cmd, function(err, stdout, stderr) {
+        assert.equal(err.code, 255);
+        assert.ok(stdout.indexOf('a - on line 2') !== -1);
+        assert.ok(stdout.indexOf('b - on line 2') !== -1);
+        done();
+    });
+});
+
+test('cli_function_single_file_ignore_params_options', function(done) {
+    var child, cmd;
+
+    cmd = BINARY + ' test/fixtures/function-with-params.js --ignore-params a'
+    child = exec(cmd, function(err, stdout, stderr) {
+        assert.equal(err.code, 255);
+        assert.ok(stdout.indexOf('a - on line') === -1);
+        assert.ok(stdout.indexOf('b - on line 2') !== -1);
+        done();
+    });
+});
