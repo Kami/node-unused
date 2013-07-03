@@ -1,7 +1,7 @@
 {
   "name": "unused",
   "description": "A module which reports unused variables in your code.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "author": "Tomaz Muraus <tomaz+npm@tomaz.me> http://www.tomaz.me",
   "keywords": [
     "unused",
