@@ -3,7 +3,8 @@
 var fs = require('fs');
 
 var argv = require('optimist')
-    .usage('Usage: unused <file>')
+    .usage('Usage: unused [--ignore-params <param 1,param 2,param n..>] <file>')
+    .string('ignore-params')
     .describe('ignore-params', 'comma separated list of unused function parameters to ignore')
     .argv;
 
