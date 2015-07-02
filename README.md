@@ -40,3 +40,7 @@ Returns an array of objects specifying the name, location, and if the variable i
 ```shell
 npm install unused
 ```
+
+## License
+
+Library is distributed under the [Apache license](http://www.apache.org/licenses/LICENSE-2.0.html).

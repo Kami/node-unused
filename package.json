@@ -29,5 +29,6 @@
     "node": ">= 0.4.0"
   },
   "main": "./index.js",
-  "bin": "./bin/unused"
+  "bin": "./bin/unused",
+  "license": "Apache-2.0"
 }
